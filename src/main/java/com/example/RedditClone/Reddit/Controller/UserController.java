@@ -59,7 +59,6 @@ public class UserController {
     @PutMapping(path = "/change/status")
     public String changeStatus(@RequestParam boolean status, @RequestParam UUID userId){
         return userService.changeStatus(status,userId);
-
     }
 
     @ApiOperation("Search User")
@@ -74,6 +73,5 @@ public class UserController {
         return userService.filterUser(filterRequest);
     }
 
-    //TODO : RELATIVE TIME ( 1 DAY AGO)
 
 }
