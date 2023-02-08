@@ -17,10 +17,9 @@ public class User {
     }
     @Id
     private UUID userId;
-    //private String userName;
     private String name;
-    //private String password;
     private Date dateOfBirth;
+    private String emailAddress;
     private GENDER gender;
     private Date createdTimeStamp;
     private Date updatedTimeStamp;
@@ -60,6 +59,14 @@ public class User {
 
     public Date getCreatedTimeStamp() {
         return createdTimeStamp;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public void setCreatedTimeStamp(Date createdTimeStamp) {

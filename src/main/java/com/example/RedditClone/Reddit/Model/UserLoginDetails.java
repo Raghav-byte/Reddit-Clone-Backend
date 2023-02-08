@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.UUID;
-import java.util.zip.DataFormatException;
 
 @Document
 public class UserLoginDetails {
@@ -15,6 +14,7 @@ public class UserLoginDetails {
     private String userName;
     private String name;
     private String password;
+    private String emailId;
     private Date createdTimeStamp;
 
 
@@ -28,6 +28,14 @@ public class UserLoginDetails {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 
     public void setUserName(String userName) {

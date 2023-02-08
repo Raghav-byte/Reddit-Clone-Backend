@@ -1,24 +1,27 @@
 package com.example.RedditClone.Reddit.Service;
 
 import com.example.RedditClone.Reddit.Model.User;
+import com.example.RedditClone.Reddit.Model.UserLoginDetails;
+import com.example.RedditClone.Reddit.Repository.UserLoginDetailsRepo;
 import com.example.RedditClone.Reddit.Repository.UserRepo;
-import com.lowagie.text.*;
-
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.List;
 
@@ -29,6 +32,10 @@ public class MiscellaneousService {
     private UserRepo userRepo;
     @Autowired
     private MongoOperations mongoOperations;
+    @Autowired
+    private UserLoginDetailsRepo loginDetailsRepo;
+    @Autowired
+    private JavaMailSender mailSender;
 
     //FIND USER NAME BY USER-ID
     public String findUserName(UUID userId) {
@@ -71,8 +78,8 @@ public class MiscellaneousService {
         }
 
             int rowIdx = 1;
-            //"Created Date" , "Name" , "Date of Birth" , "Gender" , "Mobile NUmber" , "Address" , "Active "};
-            for (User user : userList){
+
+        for (User user : userList){
                 Row row = sheet.createRow(rowIdx++);
                 //creating cells for the row
                 row.createCell(0).setCellValue(sdf.format(user.getCreatedTimeStamp()));
@@ -94,78 +101,60 @@ public class MiscellaneousService {
         }
     }
 
-//    public ResponseEntity<File> exportToPDF() throws FileNotFoundException {
-//
-//            List<User> userList = mongoOperations.findAll(User.class);
-//            Document document = new Document(PageSize.A4);
-//            File file = new File("users.pdf");
-//            FileOutputStream outputStream = new FileOutputStream(file);
-//            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-//            document.open();
-//            com.lowagie.text.Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-//            font.setSize(10);
-//            font.setColor(java.awt.Color.BLACK.darker());
-//
-//            Paragraph p = new Paragraph("Tax Invoice", font);
-//            p.add(Chunk.NEWLINE);
-//            p.add("Original For Recipient");
-//            p.setAlignment(Paragraph.ALIGN_CENTER);
-//            document.add(p);
-//            for (User user : userList) {
-//
-//                PdfPTable table = new PdfPTable(11);
-//                table.setWidthPercentage(100f);
-//                //table.setWidths(new float[] {5.0f,5.0f, 3.5f, 2.0f, 3.0f, 3.0f,3.5f, 3.0f, 3.0f, 3.7f, 3.5f});
-//                table.setSpacingBefore(5);
-//                table.getDefaultCell().setBorder(0);
-//
-//                //creating headers of table
-//                PdfPCell cell = new PdfPCell();
-//                cell.setBackgroundColor(java.awt.Color.LIGHT_GRAY);
-//                cell.setPadding(5);
-//
-//                font.setColor(java.awt.Color.black);
-//                font.setSize(10);
-//
-//                cell.setPhrase(new Phrase("Users", font));
-//                cell.setBorder(0);
-//                table.addCell(cell);
-//
-//                Paragraph paragraph = new Paragraph("Order Id:  12345 " ,font);
-//                paragraph.add(Chunk.NEWLINE);
-//                paragraph.setLeading(20);
-//
-//                LineSeparator ls = new LineSeparator();
-//                document.add(new Chunk(ls));
-//
-//
-//                    Paragraph para = new Paragraph("Customer Name :" ,font);
-//                    para.add(Chunk.NEWLINE);
-//                    paragraph.setLeading(20);
-//                    //para.add("Customer Mobile Number : "+(!TextUtils.isEmpty(vendorwiseOrders.getUserMobileNumber()) ? vendorwiseOrders.getUserMobileNumber() : "N/A"));
-//                    para.add(Chunk.NEWLINE);
-//                    //para.add("OrderType : "+((vendorwiseOrders.getOrderType() != null) ? vendorwiseOrders.getOrderType() : "N/A"));
-//                    document.add(para);
-//
-//                PdfPCell dataCell = new PdfPCell();
-//                dataCell.setBorder(Rectangle.NO_BORDER);
-//                dataCell.setPaddingTop(8f);
-//                dataCell.setPaddingBottom(8f);
-//
-//                dataCell.setPhrase(new Phrase("Raghav"));
-//                table.addCell(dataCell);
-//
-//
-//                Paragraph space = new Paragraph(Chunk.NEWLINE);
-//                document.add(space);
-//                //  document.newPage();
-//            }
-//
-//            document.close();
-//            ResponseEntity<File> response = new ResponseEntity<>(file,HttpStatus.CREATED);
-//            return  response;
-//        }
+    //GENERATING RANDOM PASSWORD
+    public String generateUsernameAndPassword(){
+        CharacterRule LC = new CharacterRule(EnglishCharacterData.LowerCase);
+        LC.setNumberOfCharacters(4);
+        CharacterRule UC = new CharacterRule(EnglishCharacterData.UpperCase);
+        UC.setNumberOfCharacters(2);
+        CharacterRule SC = new CharacterRule(EnglishCharacterData.Special);
+        SC.setNumberOfCharacters(2);
+        CharacterRule D = new CharacterRule(EnglishCharacterData.Digit);
+        D.setNumberOfCharacters(2);
+        PasswordGenerator passGen = new PasswordGenerator();
+        return passGen.generatePassword(10,LC,UC,SC,D);
+    }
 
+    //CHECK THE ENTERED USERNAME AND PASSWORD IS CORRECT OR NOT
+    public boolean checkUsernamePassword(UUID userId, String username, String password) {
+        Optional<UserLoginDetails> loginDetails = loginDetailsRepo.findById(userId);
+        if (loginDetails.isPresent()){
+            if (loginDetails.get().getUserName().equals(username) && loginDetails.get().getPassword().equals(password)){
+                return true;
+            }else {
+                return false;
+            }
+        }
+        else {
+            throw new ResourceAccessException("Login Details not found");
+        }
+    }
 
+    public String resetPassword(UUID userId, String username) {
+        Optional<UserLoginDetails> loginDetails = null ;
 
+        if (userId != null){
+            loginDetails = loginDetailsRepo.findById(userId);
+        } else if (username != null && userId == null) {
+            loginDetails = loginDetailsRepo.findByUserName(username);
+        }
+
+        if (loginDetails != null){
+            String newPassword = generateUsernameAndPassword();
+            loginDetails.get().setPassword(newPassword);
+            loginDetailsRepo.save(loginDetails.get());
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(loginDetails.get().getEmailId());
+            message.setSubject("Hi User ! Here is your new password");
+            message.setText("Password : " + newPassword);
+
+            mailSender.send(message);
+            return "New Password successfully sent to the user";
+
+        }else {
+            throw new ResourceAccessException("User Not Found");
+        }
+
+    }
 }

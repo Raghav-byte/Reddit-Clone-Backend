@@ -78,11 +78,24 @@
 			<version>1.3.8</version>
 		</dependency>
 
-
+		<!--		Relative Time dependency -->
 		<dependency>
 			<groupId>org.ocpsoft.prettytime</groupId>
 			<artifactId>prettytime</artifactId>
 			<version>5.0.6.Final</version>
+		</dependency>
+
+		<!--		Mail related dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!--		Generate Random Username and Password dependency -->
+		<dependency>
+			<groupId>org.passay</groupId>
+			<artifactId>passay</artifactId>
+			<version>1.3.1</version>
 		</dependency>
 
 	</dependencies>

@@ -53,13 +53,7 @@ public class MiscellaneousController {
                 .body(in);
     }
 
-//    @ApiOperation(" Export user in pdf")
-//    @GetMapping(value = "/export/users/pdf")
-//    public ResponseEntity<File> exportToPDF() throws FileNotFoundException {
-//        return miscellaneousService.exportToPDF();
-//    }
-
-
+    @ApiOperation("Get relative time")
     @GetMapping("/get/relativeTime")
     public String findRelativeTime(Date createdTimeStamp){
         PrettyTime prettyTime = new PrettyTime();
