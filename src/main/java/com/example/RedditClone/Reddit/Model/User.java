@@ -12,9 +12,10 @@ import java.util.UUID;
 @Document
 public class User {
 
-    public enum GENDER{
-        MALE,FEMALE,OTHER
+    public enum GENDER {
+        MALE, FEMALE, OTHER
     }
+
     @Id
     private UUID userId;
     private String name;
@@ -27,7 +28,7 @@ public class User {
     private Address address;
     private ContactInformation contactInformation;
 
-    public User(){
+    public User() {
         this.userId = UuidUtil.getTimeBasedUuid();
         this.createdTimeStamp = new Date();
         this.isActive = true;

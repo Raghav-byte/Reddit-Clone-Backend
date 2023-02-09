@@ -29,12 +29,12 @@ public class VoteService {
     public Vote addVote(Vote vote) {
         Optional<User> user = userRepo.findById(vote.getUserId());
         Optional<Post> post = postRepo.findById(vote.getPostId());
-        if (user.isPresent() && post.isPresent()){
+        if (user.isPresent() && post.isPresent()) {
             post.get().getVotes().add(vote);
             post.get().setTotalVote(post.get().getTotalVote() + 1);
             postRepo.save(post.get());
             voteRepo.save(vote);
-        }else {
+        } else {
             throw new ResourceAccessException("User or Post Not Found");
         }
         return vote;

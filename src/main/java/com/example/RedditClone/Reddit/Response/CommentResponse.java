@@ -11,7 +11,7 @@ public class CommentResponse {
     private long totalComments;
     private List<Comment> commentList;
 
-    public CommentResponse(){
+    public CommentResponse() {
         this.commentList = new ArrayList<>();
     }
 

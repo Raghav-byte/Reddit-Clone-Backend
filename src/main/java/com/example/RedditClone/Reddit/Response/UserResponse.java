@@ -12,7 +12,7 @@ public class UserResponse {
     private long inActiveUsers;
     private List<User> userList;
 
-    public UserResponse(){
+    public UserResponse() {
         this.userList = new ArrayList<>();
     }
 

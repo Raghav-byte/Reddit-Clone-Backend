@@ -24,7 +24,7 @@ public class Vote {
     private VOTE_TYPE voteType;
     private UUID userId;
 
-    public Vote(){
+    public Vote() {
         this.voteId = UuidUtil.getTimeBasedUuid();
         this.createdTimeStamp = new Date();
     }

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubredditService {
-    
+
     @Autowired
     private SubredditRepo subRepo;
     @Autowired
@@ -60,18 +60,18 @@ public class SubredditService {
         query.addCriteria(Criteria.where("subId").is(sub.getSubId()));
 
         Update update = new Update();
-        if (!sub.getSubTitle().isEmpty()){
-            update.set("subTitle",sub.getSubTitle());
+        if (!sub.getSubTitle().isEmpty()) {
+            update.set("subTitle", sub.getSubTitle());
         }
-        if (!sub.getSubDescription().isEmpty()){
-            update.set("subDescription",sub.getSubDescription());
+        if (!sub.getSubDescription().isEmpty()) {
+            update.set("subDescription", sub.getSubDescription());
         }
-        if (!sub.getProfilePic().isEmpty()){
-            update.set("profilePic",sub.getProfilePic());
+        if (!sub.getProfilePic().isEmpty()) {
+            update.set("profilePic", sub.getProfilePic());
         }
-        update.set("updatedTimeStamp",new Date());
+        update.set("updatedTimeStamp", new Date());
 
-        return mongoTemplate.findAndModify(query,update, Subreddit.class);
+        return mongoTemplate.findAndModify(query, update, Subreddit.class);
     }
 
     //DELETE SUB
@@ -81,11 +81,11 @@ public class SubredditService {
     }
 
     //CHANGING STATUS OF SUB
-    public String changeStatus(boolean status,UUID subId) {
+    public String changeStatus(boolean status, UUID subId) {
         Optional<Subreddit> sub = subRepo.findById(subId);
-        if (sub.isPresent()){
+        if (sub.isPresent()) {
             sub.get().setActive(status);
-        }else {
+        } else {
             throw new ResourceAccessException("Subreddit Not Found");
         }
         return "Status changed Successfully";
@@ -101,41 +101,41 @@ public class SubredditService {
         Query query = new Query();
         List<Criteria> criteriaList = new ArrayList<>();
 
-        if (filterRequest.getActive() != null){
+        if (filterRequest.getActive() != null) {
             criteriaList.add(Criteria.where("isActive").is(filterRequest.getActive()));
         }
         //DO FOR SIZE OF USERS AND POSTS
-        if (filterRequest.getPost() > 0){
+        if (filterRequest.getPost() > 0) {
             criteriaList.add(Criteria.where("posts").gte(filterRequest.getPost()));
         }
-        if (filterRequest.getUsers() > 0){
+        if (filterRequest.getUsers() > 0) {
             criteriaList.add(Criteria.where("users").gte(filterRequest.getUsers()));
         }
 
-        if(!CollectionUtils.isEmpty(criteriaList)){
+        if (!CollectionUtils.isEmpty(criteriaList)) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[criteriaList.size()])));
         }
 
-        return mongoTemplate.find(query,Subreddit.class);
+        return mongoTemplate.find(query, Subreddit.class);
     }
 
     public UserResponse usersOnSub(UUID subId) {
         Optional<Subreddit> subreddit = subRepo.findById(subId);
-        if (subreddit.isPresent()){
+        if (subreddit.isPresent()) {
             UserResponse userResponse = new UserResponse();
             userResponse.setTotalUsers(subreddit.get().getUsers().size());
-            userResponse.setActiveUser(subreddit.get().getUsers().stream().filter(f->f.isActive()).collect(Collectors.toList()).size());
-            userResponse.setInActiveUsers(subreddit.get().getUsers().stream().filter(f-> !f.isActive()).collect(Collectors.toList()).size());
+            userResponse.setActiveUser(subreddit.get().getUsers().stream().filter(f -> f.isActive()).collect(Collectors.toList()).size());
+            userResponse.setInActiveUsers(subreddit.get().getUsers().stream().filter(f -> !f.isActive()).collect(Collectors.toList()).size());
             userResponse.setUserList(subreddit.get().getUsers());
             return userResponse;
-        }else {
+        } else {
             throw new ResourceAccessException("Subreddit not found");
         }
     }
 
     public VoteResponse votesOnSub(UUID subId) {
         Optional<Subreddit> subreddit = subRepo.findById(subId);
-        if (subreddit.isPresent()){
+        if (subreddit.isPresent()) {
 
             VoteResponse voteResponse = new VoteResponse();
             for (Post post : subreddit.get().getPosts()) {
@@ -143,7 +143,7 @@ public class SubredditService {
                 voteResponse.getVoteList().addAll(post.getVotes());
                 return voteResponse;
             }
-        }else {
+        } else {
             throw new ResourceAccessException("Subreddit not found");
         }
         return null;
@@ -151,7 +151,7 @@ public class SubredditService {
 
     public CommentResponse commentsOnSub(UUID subId) {
         Optional<Subreddit> subreddit = subRepo.findById(subId);
-        if (subreddit.isPresent()){
+        if (subreddit.isPresent()) {
 
             CommentResponse commentResponse = new CommentResponse();
             for (Post post : subreddit.get().getPosts()) {
@@ -159,25 +159,25 @@ public class SubredditService {
                 commentResponse.setTotalComments(commentResponse.getTotalComments() + post.getComments().size());
                 return commentResponse;
             }
-        }else {
+        } else {
             throw new ResourceAccessException("Subreddit not found");
         }
         return null;
     }
 
     //ADD USER IN SUB
-    public String addUserInSub(UUID subId, UUID userId){
+    public String addUserInSub(UUID subId, UUID userId) {
         Optional<Subreddit> subreddit = subRepo.findById(subId);
         Optional<User> user = userRepo.findById(userId);
 
-        if (subreddit.isPresent() && user.isPresent()){
-            if (subreddit.get().getUsers() == null){
+        if (subreddit.isPresent() && user.isPresent()) {
+            if (subreddit.get().getUsers() == null) {
                 subreddit.get().setUsers(new ArrayList<>());
             }
             subreddit.get().getUsers().add(user.get());
             subreddit.get().setTotalUsers(subreddit.get().getTotalUsers() + 1);
             subRepo.save(subreddit.get());
-        }else {
+        } else {
             throw new ResourceAccessException("User or Post not found");
         }
         return miscellaneousService.findUserName(userId) + "Added in the subreddit";

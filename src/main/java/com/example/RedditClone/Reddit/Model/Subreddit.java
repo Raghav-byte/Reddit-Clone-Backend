@@ -20,12 +20,12 @@ public class Subreddit {
     private Date updatedTimeStamp;
     private boolean isActive;
     private String profilePic;
-    private List<Post> posts ;
+    private List<Post> posts;
     private List<User> users;
     private long totalUsers;
     private long totalPosts;
 
-    public Subreddit(){
+    public Subreddit() {
         this.subId = UuidUtil.getTimeBasedUuid();
         this.createdTimeStamp = new Date();
         this.isActive = true;

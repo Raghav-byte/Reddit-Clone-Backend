@@ -31,19 +31,19 @@ import java.util.UUID;
 public class MiscellaneousController {
 
     @Autowired
-    private UserRepo userRepo ;
+    private UserRepo userRepo;
     @Autowired
     private MiscellaneousService miscellaneousService;
 
     @ApiOperation("Find user name by id")
     @GetMapping(path = "/find/user")
-    public String findUserName(@RequestParam UUID userId){
+    public String findUserName(@RequestParam UUID userId) {
         return miscellaneousService.findUserName(userId);
     }
 
     @ApiOperation("Export all users in excel")
     @GetMapping(path = "/export/users/excel")
-    public ResponseEntity<ByteArrayResource> exportUsers(){
+    public ResponseEntity<ByteArrayResource> exportUsers() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=Users_Export");
         ByteArrayResource in = miscellaneousService.exportUsers();
@@ -55,9 +55,9 @@ public class MiscellaneousController {
 
     @ApiOperation("Get relative time")
     @GetMapping("/get/relativeTime")
-    public String findRelativeTime(Date createdTimeStamp){
+    public String findRelativeTime(Date createdTimeStamp) {
         PrettyTime prettyTime = new PrettyTime();
         return prettyTime.format(createdTimeStamp);
-   }
+    }
 
 }

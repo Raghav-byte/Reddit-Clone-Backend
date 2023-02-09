@@ -68,21 +68,21 @@ public class UserService {
         query.addCriteria(Criteria.where("userId").is(user.getUserId()));
 
         Update update = new Update();
-        if (!user.getName().isEmpty()){
-            update.set("name",user.getName());
+        if (!user.getName().isEmpty()) {
+            update.set("name", user.getName());
         }
-        if (user.getDateOfBirth() != null){
-            update.set("dateOfBirth",user.getDateOfBirth());
+        if (user.getDateOfBirth() != null) {
+            update.set("dateOfBirth", user.getDateOfBirth());
         }
-        if (user.getAddress() != null){
-            update.set("address",user.getAddress());
+        if (user.getAddress() != null) {
+            update.set("address", user.getAddress());
         }
-        if (user.getContactInformation() != null){
-            update.set("contactInformation",user.getContactInformation());
+        if (user.getContactInformation() != null) {
+            update.set("contactInformation", user.getContactInformation());
         }
-        update.set("updatedTimeStamp",new Date());
+        update.set("updatedTimeStamp", new Date());
 
-        return mongoTemplate.findAndModify(query,update, User.class);
+        return mongoTemplate.findAndModify(query, update, User.class);
     }
 
     //DELETE USER
@@ -92,7 +92,7 @@ public class UserService {
     }
 
     //CHANGING STATUS OF USER
-    public String changeStatus(boolean status,UUID userId) {
+    public String changeStatus(boolean status, UUID userId) {
         Optional<User> user = userRepo.findById(userId);
         List<Subreddit> subreddits = subRepo.findAll();
         List<Subreddit> temp = new ArrayList<>();
@@ -100,13 +100,13 @@ public class UserService {
         //FINDING ALL THE SUBS WHERE USER IS PRESENT AND STORING THAT SUBS IN TEMP
         subreddits.forEach(subs -> subs.getUsers().stream().filter(u -> u.getUserId().equals(userId)).map(u -> subs).forEach(temp::add));
 
-        if (user.isPresent()){
+        if (user.isPresent()) {
             user.get().setActive(status);
             userRepo.save(user.get());
             //SAVING THE CHANGED STATUS IN SUBS ALSO
             temp.forEach(s -> s.getUsers().forEach(u -> u.setActive(status)));
             subRepo.saveAll(temp);
-        }else {
+        } else {
             throw new ResourceAccessException("User Not Found");
         }
         return "Status changed Successfully";
@@ -122,34 +122,34 @@ public class UserService {
         Query query = new Query();
         List<Criteria> criteriaList = new ArrayList<>();
 
-        if (filterRequest.getActive() != null){
+        if (filterRequest.getActive() != null) {
             criteriaList.add(Criteria.where("isActive").is(filterRequest.getActive()));
         }
-        if (filterRequest.getStartDate() != null && filterRequest.getEndDate() != null){
+        if (filterRequest.getStartDate() != null && filterRequest.getEndDate() != null) {
             criteriaList.add(Criteria.where("createdTimeStamp").gte(filterRequest.getStartDate()));
             criteriaList.add(Criteria.where("createdTimeStamp").lt(filterRequest.getEndDate()));
         }
-        if (filterRequest.getDateOfBirth() != null){
+        if (filterRequest.getDateOfBirth() != null) {
             criteriaList.add(Criteria.where("dateOfBirth").gte(filterRequest.getDateOfBirth()));
         }
-        if (filterRequest.getCountry() != null && !filterRequest.getCountry().isEmpty()){
+        if (filterRequest.getCountry() != null && !filterRequest.getCountry().isEmpty()) {
             criteriaList.add(Criteria.where("country").is(filterRequest.getCountry()));
         }
-        if (filterRequest.getCountry() != null && !filterRequest.getState().isEmpty()){
+        if (filterRequest.getCountry() != null && !filterRequest.getState().isEmpty()) {
             criteriaList.add(Criteria.where("state").is(filterRequest.getState()));
         }
-        if (filterRequest.getCountry() != null && !filterRequest.getCity().isEmpty()){
+        if (filterRequest.getCountry() != null && !filterRequest.getCity().isEmpty()) {
             criteriaList.add(Criteria.where("city").is(filterRequest.getCountry()));
         }
-        if (filterRequest.getGender() != null){
+        if (filterRequest.getGender() != null) {
             criteriaList.add(Criteria.where("gender").is(filterRequest.getGender()));
         }
 
-        if(!CollectionUtils.isEmpty(criteriaList)){
+        if (!CollectionUtils.isEmpty(criteriaList)) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[criteriaList.size()])));
         }
 
-        return mongoTemplate.find(query,User.class);
+        return mongoTemplate.find(query, User.class);
     }
 
     //SENDING USERNAME AND PASSWORD TO USER VIA EMAIL
@@ -163,7 +163,7 @@ public class UserService {
         String userName = name[0].toLowerCase() + random.nextInt(1500);
         String password = miscellaneousService.generateUsernameAndPassword();
 
-        if (user.isPresent()){
+        if (user.isPresent()) {
             UserLoginDetails userLoginDetails = new UserLoginDetails();
             userLoginDetails.setName(user.get().getName());
             userLoginDetails.setUserId(userId);
@@ -175,12 +175,11 @@ public class UserService {
 
             message.setTo(user.get().getEmailAddress());
             message.setSubject("Hi User ! Here are your login credentials");
-            message.setText("Username : " + userName +  "Password : " + password);
+            message.setText("Username : " + userName + "Password : " + password);
 
             mailSender.send(message);
             return "Login credentials sent successfully to the user";
-        }
-        else {
+        } else {
             throw new ResourceAccessException("User not found ");
         }
 

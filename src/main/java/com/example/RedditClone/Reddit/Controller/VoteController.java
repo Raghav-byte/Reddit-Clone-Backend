@@ -18,19 +18,19 @@ public class VoteController {
 
     @ApiOperation("Adding vote to a post")
     @PostMapping(path = "/")
-    public Vote addVote(@RequestBody Vote vote ){
+    public Vote addVote(@RequestBody Vote vote) {
         return voteService.addVote(vote);
     }
 
     @ApiOperation("Find Vote by one User")
     @GetMapping(path = "/user")
-    public List<Vote> voteByUser(@RequestParam UUID userId){
+    public List<Vote> voteByUser(@RequestParam UUID userId) {
         return voteService.voteByUser(userId);
     }
 
     @ApiOperation("Find Vote on one Post")
     @GetMapping(path = "/post")
-    public List<Vote> voteByPost(@RequestParam UUID postId){
+    public List<Vote> voteByPost(@RequestParam UUID postId) {
         return voteService.voteByPost(postId);
     }
 }

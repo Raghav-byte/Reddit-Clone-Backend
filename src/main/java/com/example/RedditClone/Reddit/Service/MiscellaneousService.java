@@ -51,35 +51,35 @@ public class MiscellaneousService {
         List<User> userList = mongoOperations.findAll(User.class);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-        String[] COLUMNs = {"Created Date" , "Name" , "Date of Birth" , "Gender" , "Mobile NUmber" , "Address" , "Active "};
+        String[] COLUMNs = {"Created Date", "Name", "Date of Birth", "Gender", "Mobile NUmber", "Address", "Active "};
         try (
                 Workbook workbook = new XSSFWorkbook();
                 ByteArrayOutputStream out = new ByteArrayOutputStream()
-        ){
-        CreationHelper createHelper = workbook.getCreationHelper();
-        Sheet sheet = workbook.createSheet("Users");
+        ) {
+            CreationHelper createHelper = workbook.getCreationHelper();
+            Sheet sheet = workbook.createSheet("Users");
 
-        Font headerFont = workbook.createFont();
-        headerFont.setBold(true);
-        headerFont.setColor(IndexedColors.BLUE.getIndex());
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerFont.setColor(IndexedColors.BLUE.getIndex());
 
-        CellStyle headerCellStyle = workbook.createCellStyle();
-        headerCellStyle.setFont(headerFont);
+            CellStyle headerCellStyle = workbook.createCellStyle();
+            headerCellStyle.setFont(headerFont);
 
-        // Row for Header
-        Row headerRow = sheet.createRow(0);
+            // Row for Header
+            Row headerRow = sheet.createRow(0);
 
-        // Header
-        for (int col = 0; col < COLUMNs.length; col++) {
-            sheet.setColumnWidth(col,20*256);
-            Cell cell = headerRow.createCell(col);
-            cell.setCellValue(COLUMNs[col]);
-            cell.setCellStyle(headerCellStyle);
-        }
+            // Header
+            for (int col = 0; col < COLUMNs.length; col++) {
+                sheet.setColumnWidth(col, 20 * 256);
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(COLUMNs[col]);
+                cell.setCellStyle(headerCellStyle);
+            }
 
             int rowIdx = 1;
 
-        for (User user : userList){
+            for (User user : userList) {
                 Row row = sheet.createRow(rowIdx++);
                 //creating cells for the row
                 row.createCell(0).setCellValue(sdf.format(user.getCreatedTimeStamp()));
@@ -95,14 +95,13 @@ public class MiscellaneousService {
 
             workbook.write(out);
             return new ByteArrayResource(out.toByteArray());
-        }
-     catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     //GENERATING RANDOM PASSWORD
-    public String generateUsernameAndPassword(){
+    public String generateUsernameAndPassword() {
         CharacterRule LC = new CharacterRule(EnglishCharacterData.LowerCase);
         LC.setNumberOfCharacters(4);
         CharacterRule UC = new CharacterRule(EnglishCharacterData.UpperCase);
@@ -112,34 +111,33 @@ public class MiscellaneousService {
         CharacterRule D = new CharacterRule(EnglishCharacterData.Digit);
         D.setNumberOfCharacters(2);
         PasswordGenerator passGen = new PasswordGenerator();
-        return passGen.generatePassword(10,LC,UC,SC,D);
+        return passGen.generatePassword(10, LC, UC, SC, D);
     }
 
     //CHECK THE ENTERED USERNAME AND PASSWORD IS CORRECT OR NOT
     public boolean checkUsernamePassword(UUID userId, String username, String password) {
         Optional<UserLoginDetails> loginDetails = loginDetailsRepo.findById(userId);
-        if (loginDetails.isPresent()){
-            if (loginDetails.get().getUserName().equals(username) && loginDetails.get().getPassword().equals(password)){
+        if (loginDetails.isPresent()) {
+            if (loginDetails.get().getUserName().equals(username) && loginDetails.get().getPassword().equals(password)) {
                 return true;
-            }else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             throw new ResourceAccessException("Login Details not found");
         }
     }
 
     public String resetPassword(UUID userId, String username) {
-        Optional<UserLoginDetails> loginDetails = null ;
+        Optional<UserLoginDetails> loginDetails = null;
 
-        if (userId != null){
+        if (userId != null) {
             loginDetails = loginDetailsRepo.findById(userId);
         } else if (username != null && userId == null) {
             loginDetails = loginDetailsRepo.findByUserName(username);
         }
 
-        if (loginDetails != null){
+        if (loginDetails != null) {
             String newPassword = generateUsernameAndPassword();
             loginDetails.get().setPassword(newPassword);
             loginDetailsRepo.save(loginDetails.get());
@@ -152,7 +150,7 @@ public class MiscellaneousService {
             mailSender.send(message);
             return "New Password successfully sent to the user";
 
-        }else {
+        } else {
             throw new ResourceAccessException("User Not Found");
         }
 

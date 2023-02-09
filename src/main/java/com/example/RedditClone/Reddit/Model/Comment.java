@@ -17,7 +17,7 @@ public class Comment {
     private Date createdTimeStamp;
     private UUID userId;
 
-    public Comment(){
+    public Comment() {
         this.commentId = UuidUtil.getTimeBasedUuid();
         this.createdTimeStamp = new Date();
     }

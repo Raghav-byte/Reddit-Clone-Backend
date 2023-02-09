@@ -19,16 +19,15 @@ public class AuthenticationController {
 
     @ApiOperation("Authenticate the username and password")
     @GetMapping("/credentials")
-    public boolean checkUsernamePassword(@RequestParam UUID userId, @RequestParam String username , @RequestParam String password){
-        return miscellaneousService.checkUsernamePassword(userId,username,password);
+    public boolean checkUsernamePassword(@RequestParam UUID userId, @RequestParam String username, @RequestParam String password) {
+        return miscellaneousService.checkUsernamePassword(userId, username, password);
     }
 
     @ApiOperation("Reset password request")
     @GetMapping("/reset")
-    public String resetPassword(@RequestParam(required = false) UUID userId, @RequestParam(required = false) String username){
-        return miscellaneousService.resetPassword(userId,username);
+    public String resetPassword(@RequestParam(required = false) UUID userId, @RequestParam(required = false) String username) {
+        return miscellaneousService.resetPassword(userId, username);
     }
-
 
 
 }

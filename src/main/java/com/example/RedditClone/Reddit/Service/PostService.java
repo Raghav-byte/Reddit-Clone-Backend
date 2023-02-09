@@ -42,7 +42,7 @@ public class PostService {
     //CREATE POST
     public Post createPost(Post post) {
         Optional<Subreddit> subreddit = subrepo.findById(post.getSubId());
-        if (subreddit.isPresent()){
+        if (subreddit.isPresent()) {
             subreddit.get().getPosts().add(post);
             subreddit.get().setTotalPosts(subreddit.get().getTotalPosts() + 1);
             subrepo.save(subreddit.get());
@@ -71,15 +71,15 @@ public class PostService {
         query.addCriteria(Criteria.where("postId").is(post.getPostId()));
 
         Update update = new Update();
-        if (!post.getPostTitle().isEmpty()){
-            update.set("postTitle",post.getPostTitle());
+        if (!post.getPostTitle().isEmpty()) {
+            update.set("postTitle", post.getPostTitle());
         }
-        if (!post.getPostDescription().isEmpty()){
-            update.set("postDescription",post.getPostDescription());
+        if (!post.getPostDescription().isEmpty()) {
+            update.set("postDescription", post.getPostDescription());
         }
-        update.set("updatedTimeStamp",new Date());
+        update.set("updatedTimeStamp", new Date());
 
-        return mongoTemplate.findAndModify(query,update, Post.class);
+        return mongoTemplate.findAndModify(query, update, Post.class);
     }
 
     //DELETE POST
@@ -89,11 +89,11 @@ public class PostService {
     }
 
     //CHANGING STATUS OF POST
-    public String changeStatus(boolean status,UUID postId) {
+    public String changeStatus(boolean status, UUID postId) {
         Optional<Post> post = postRepo.findById(postId);
-        if (post.isPresent()){
+        if (post.isPresent()) {
             post.get().setActive(status);
-        }else {
+        } else {
             throw new ResourceAccessException("Post Not Found");
         }
         return "Status changed Successfully";
@@ -109,46 +109,46 @@ public class PostService {
         Query query = new Query();
         List<Criteria> criteriaList = new ArrayList<>();
 
-        if (filterRequest.getActive() != null){
+        if (filterRequest.getActive() != null) {
             criteriaList.add(Criteria.where("isActive").is(filterRequest.getActive()));
         }
         //DO FOR SIZE OF USERS AND POSTS
-        if (filterRequest.getComments() > 0){
+        if (filterRequest.getComments() > 0) {
             criteriaList.add(Criteria.where("comments").gte(filterRequest.getComments()));
         }
-        if (filterRequest.getVotes() > 0){
+        if (filterRequest.getVotes() > 0) {
             criteriaList.add(Criteria.where("votes").gte(filterRequest.getVotes()));
         }
 
-        if(!CollectionUtils.isEmpty(criteriaList)){
+        if (!CollectionUtils.isEmpty(criteriaList)) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[criteriaList.size()])));
         }
 
-        return mongoTemplate.find(query,Post.class);
+        return mongoTemplate.find(query, Post.class);
     }
 
     public VoteResponse votesOnSub(UUID postId) {
         Optional<Post> post = postRepo.findById(postId);
-        if (post.isPresent()){
+        if (post.isPresent()) {
 
             VoteResponse voteResponse = new VoteResponse();
             voteResponse.setTotalVotes(post.get().getVotes().size());
             voteResponse.setVoteList(post.get().getVotes());
             return voteResponse;
-        }else {
+        } else {
             throw new ResourceAccessException("Post not found");
         }
     }
 
     public CommentResponse commentsOnSub(UUID postId) {
         Optional<Post> post = postRepo.findById(postId);
-        if (post.isPresent()){
+        if (post.isPresent()) {
 
             CommentResponse commentResponse = new CommentResponse();
             commentResponse.setTotalComments(post.get().getComments().size());
             commentResponse.setCommentList(post.get().getComments());
             return commentResponse;
-        }else {
+        } else {
             throw new ResourceAccessException("Post not found");
         }
     }

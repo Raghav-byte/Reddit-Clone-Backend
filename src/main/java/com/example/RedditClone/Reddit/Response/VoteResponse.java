@@ -10,7 +10,7 @@ public class VoteResponse {
     private long totalVotes;
     private List<Vote> voteList;
 
-    public VoteResponse(){
+    public VoteResponse() {
         this.voteList = new ArrayList<>();
     }
 

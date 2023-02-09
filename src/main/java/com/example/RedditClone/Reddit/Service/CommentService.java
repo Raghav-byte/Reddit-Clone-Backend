@@ -29,12 +29,12 @@ public class CommentService {
     public Comment addComment(Comment comment) {
         Optional<User> user = userRepo.findById(comment.getUserId());
         Optional<Post> post = postRepo.findById(comment.getPostId());
-        if (user.isPresent() && post.isPresent()){
+        if (user.isPresent() && post.isPresent()) {
             post.get().getComments().add(comment);
-            post.get().setTotalComment(post.get().getTotalComment() + 1 );
+            post.get().setTotalComment(post.get().getTotalComment() + 1);
             postRepo.save(post.get());
             commentRepo.save(comment);
-        }else {
+        } else {
             throw new ResourceAccessException("User or Post Not Found");
         }
         return comment;
@@ -50,5 +50,5 @@ public class CommentService {
     public List<Comment> commentByPost(UUID userId) {
         return commentRepo.commentByPost(userId);
     }
-    
+
 }
