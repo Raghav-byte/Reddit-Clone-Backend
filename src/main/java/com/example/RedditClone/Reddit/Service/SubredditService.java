@@ -104,12 +104,11 @@ public class SubredditService {
         if (filterRequest.getActive() != null) {
             criteriaList.add(Criteria.where("isActive").is(filterRequest.getActive()));
         }
-        //DO FOR SIZE OF USERS AND POSTS
         if (filterRequest.getPost() > 0) {
-            criteriaList.add(Criteria.where("posts").gte(filterRequest.getPost()));
+            criteriaList.add(Criteria.where("totalPosts").gte(filterRequest.getPost()));
         }
         if (filterRequest.getUsers() > 0) {
-            criteriaList.add(Criteria.where("users").gte(filterRequest.getUsers()));
+            criteriaList.add(Criteria.where("totalUsers").gte(filterRequest.getUsers()));
         }
 
         if (!CollectionUtils.isEmpty(criteriaList)) {

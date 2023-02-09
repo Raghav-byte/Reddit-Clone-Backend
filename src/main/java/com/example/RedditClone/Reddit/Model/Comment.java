@@ -15,6 +15,7 @@ public class Comment {
     private String text;
     private UUID postId;
     private Date createdTimeStamp;
+    private Date updatedTimeStamp;
     private UUID userId;
 
     public Comment() {
@@ -52,6 +53,14 @@ public class Comment {
 
     public void setCreatedTimeStamp(Date createdTimeStamp) {
         this.createdTimeStamp = createdTimeStamp;
+    }
+
+    public Date getUpdatedTimeStamp() {
+        return updatedTimeStamp;
+    }
+
+    public void setUpdatedTimeStamp(Date updatedTimeStamp) {
+        this.updatedTimeStamp = updatedTimeStamp;
     }
 
     public UUID getUserId() {

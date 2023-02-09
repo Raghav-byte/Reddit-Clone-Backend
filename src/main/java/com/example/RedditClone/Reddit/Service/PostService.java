@@ -112,12 +112,11 @@ public class PostService {
         if (filterRequest.getActive() != null) {
             criteriaList.add(Criteria.where("isActive").is(filterRequest.getActive()));
         }
-        //DO FOR SIZE OF USERS AND POSTS
         if (filterRequest.getComments() > 0) {
-            criteriaList.add(Criteria.where("comments").gte(filterRequest.getComments()));
+            criteriaList.add(Criteria.where("totalComment").gte(filterRequest.getComments()));
         }
         if (filterRequest.getVotes() > 0) {
-            criteriaList.add(Criteria.where("votes").gte(filterRequest.getVotes()));
+            criteriaList.add(Criteria.where("totalVote").gte(filterRequest.getVotes()));
         }
 
         if (!CollectionUtils.isEmpty(criteriaList)) {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -32,5 +33,23 @@ public class CommentController {
     @GetMapping(path = "/post")
     public List<Comment> commentByPost(@RequestParam UUID postId) {
         return commentService.commentByPost(postId);
+    }
+
+    @ApiOperation("Update Comment Info")
+    @PutMapping(path = "/")
+    public Comment updateComment(@RequestBody Comment comment) {
+        return commentService.updateComment(comment);
+    }
+
+    @ApiOperation("Delete Comment")
+    @DeleteMapping(path = "/")
+    public String deleteComment(@RequestParam UUID commentId) {
+        return commentService.deleteComment(commentId);
+    }
+
+    @ApiOperation("Get comment by id")
+    @GetMapping(path = "/{commentId}")
+    public Optional<Comment> getCommentById(@PathVariable UUID commentId) {
+        return commentService.getCommentById(commentId);
     }
 }

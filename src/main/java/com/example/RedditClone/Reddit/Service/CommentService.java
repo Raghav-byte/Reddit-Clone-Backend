@@ -3,14 +3,18 @@ package com.example.RedditClone.Reddit.Service;
 import com.example.RedditClone.Reddit.Model.Comment;
 import com.example.RedditClone.Reddit.Model.Post;
 import com.example.RedditClone.Reddit.Model.User;
-import com.example.RedditClone.Reddit.Model.Comment;
 import com.example.RedditClone.Reddit.Repository.PostRepo;
 import com.example.RedditClone.Reddit.Repository.UserRepo;
 import com.example.RedditClone.Reddit.Repository.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +28,8 @@ public class CommentService {
     private PostRepo postRepo;
     @Autowired
     private CommentRepo commentRepo;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     //ADDING VOTE
     public Comment addComment(Comment comment) {
@@ -51,4 +57,28 @@ public class CommentService {
         return commentRepo.commentByPost(userId);
     }
 
+    //DELETE COMMENT
+    public String deleteComment(UUID commentId) {
+        commentRepo.deleteById(commentId);
+        return "Comment Deleted";
+    }
+
+    //VIEW COMMENT BY ID
+    public Optional<Comment> getCommentById(UUID commentId) {
+        return commentRepo.findById(commentId);
+    }
+
+    //UPDATE COMMENT
+    public Comment updateComment(Comment comment) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("commentId").is(comment.getCommentId()));
+
+        Update update = new Update();
+        if (!comment.getText().isEmpty()) {
+            update.set("text", comment.getText());
+        }
+        update.set("updatedTimeStamp", new Date());
+
+        return mongoTemplate.findAndModify(query, update, Comment.class);
+    }
 }
