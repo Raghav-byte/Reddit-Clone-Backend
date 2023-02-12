@@ -105,9 +105,9 @@ public class MiscellaneousService {
         CharacterRule LC = new CharacterRule(EnglishCharacterData.LowerCase);
         LC.setNumberOfCharacters(4);
         CharacterRule UC = new CharacterRule(EnglishCharacterData.UpperCase);
-        UC.setNumberOfCharacters(2);
+        UC.setNumberOfCharacters(3);
         CharacterRule SC = new CharacterRule(EnglishCharacterData.Special);
-        SC.setNumberOfCharacters(2);
+        SC.setNumberOfCharacters(1);
         CharacterRule D = new CharacterRule(EnglishCharacterData.Digit);
         D.setNumberOfCharacters(2);
         PasswordGenerator passGen = new PasswordGenerator();
