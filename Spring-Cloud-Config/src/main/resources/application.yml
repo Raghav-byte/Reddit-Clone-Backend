@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: CLOUD-CONFIG
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Raghav-byte/Config-Repo/
+          clone-on-start: true
