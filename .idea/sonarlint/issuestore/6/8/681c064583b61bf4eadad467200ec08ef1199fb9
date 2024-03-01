@@ -1,0 +1,34 @@
+
+V	java:S125&"<This block of commented-out lines of code should be removed.(Åû—Íøÿÿÿÿ
+V	java:S125+"<This block of commented-out lines of code should be removed.(ªÉ÷¥ÿÿÿÿÿ
+V	java:S1254"<This block of commented-out lines of code should be removed.(Ãµßòûÿÿÿÿ
+E
+java:S1068"*Remove this unused "userId" private field.(ªÀııÿÿÿÿ
+?
+java:S1068")Remove this unused "subId" private field.(‚İª½
+G
+java:S1068",Remove this unused "userName" private field.(Û”øÚøÿÿÿÿ
+A
+java:S1068"+Remove this unused "subName" private field.(ØÇëš
+C
+java:S1068"-Remove this unused "postTitle" private field.(ú™æŸ
+I
+java:S1068"3Remove this unused "postDescription" private field.(ÊÊîó
+D
+java:S1068")Remove this unused "flair" private field.(è£¯íÿÿÿÿÿ
+@
+java:S1068"*Remove this unused "imgUrl" private field.(˜÷ÕÓ
+A
+java:S1068",Remove this unused "isActive" private field.(Ğ·†x
+B
+java:S1068",Remove this unused "comments" private field.(‡¸ÏÚ
+H
+java:S1068"-Remove this unused "totalVote" private field.(ò¿‘©şÿÿÿÿ
+F
+java:S1068"0Remove this unused "totalComment" private field.(•¤‘ˆ
+M
+java:S1068 "2Remove this unused "postVisitCount" private field.(ˆ¨»çúÿÿÿÿ
+O
+java:S1068""4Remove this unused "createdTimeStamp" private field.(ºŞ–Ôüÿÿÿÿ
+O
+java:S1068#"4Remove this unused "updatedTimeStamp" private field.(ê¹˜Éúÿÿÿÿ

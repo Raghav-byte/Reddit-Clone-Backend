@@ -1,0 +1,29 @@
+
+>
+java:S1068"(Remove this unused "name" private field.(Ë¥¼
+E
+java:S1068"/Remove this unused "dateOfBirth" private field.(Î€ö˜
+?
+java:S1068"*Remove this unused "gender" private field.(ÿÃ
+A
+java:S1068",Remove this unused "isActive" private field.(Ğ·†x
+F
+java:S1068"+Remove this unused "address" private field.(ßÍ˜²ıÿÿÿÿ
+Q
+java:S1068"6Remove this unused "contactInformation" private field.(Õ˜İùÿÿÿÿ
+O
+java:S1068"4Remove this unused "createdTimeStamp" private field.(ºŞ–Ôüÿÿÿÿ
+O
+java:S1068"4Remove this unused "updatedTimeStamp" private field.(ê¹˜Éúÿÿÿÿ
+F
+java:S1068!"+Remove this unused "subList" private field.(Äİ®Àıÿÿÿÿ
+B
+java:S1068"",Remove this unused "subCount" private field.(—¿²
+?
+java:S1068#")Remove this unused "posts" private field.(›Ì°
+C
+java:S1068$"-Remove this unused "postCount" private field.(Íé—ç
+B
+java:S1068%",Remove this unused "comments" private field.(‡¸ÏÚ
+F
+java:S1068&"0Remove this unused "commentCount" private field.(¨åû±
