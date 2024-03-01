@@ -1,0 +1,18 @@
+
+A
+java:S1068
+",Remove this unused "isActive" private field.(»¸ü(
+C
+java:S1068"-Remove this unused "startDate" private field.(­Ãé„
+F
+java:S1068"+Remove this unused "endDate" private field.(³ÁÎüşÿÿÿÿ
+E
+java:S1068"/Remove this unused "dateOfBirth" private field.(Î€ö˜
+F
+java:S1068"+Remove this unused "country" private field.(“—àÊúÿÿÿÿ
+D
+java:S1068")Remove this unused "state" private field.(µîŠ©øÿÿÿÿ
+>
+java:S1068"(Remove this unused "city" private field.(“øÌà
+E
+java:S1068"*Remove this unused "gender" private field.(Ø„úÍıÿÿÿÿ
