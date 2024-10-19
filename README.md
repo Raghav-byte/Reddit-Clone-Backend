@@ -20,3 +20,6 @@ Welcome to the Reddit Project repository! This project aims to replicate some of
 ## Contributing 🤝
 
 If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+## Article Link 🔗
+https://raghav-byte.hashnode.dev/reddit-backend-project-using-microservice-architecture
